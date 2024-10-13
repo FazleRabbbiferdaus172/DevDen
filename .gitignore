@@ -1,0 +1,127 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+*venv*/
+
+# Jupyter Notebook files
+.ipynb_checkpoints/
+
+# Logs
+*.log
+*.out
+*.err
+
+# Database
+*.sqlite3
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media/
+
+# Flask
+instance/
+*.pid
+
+# Static files
+staticfiles/
+static/
+static_root/
+
+# Security
+.env
+*.pem
+
+# Pytest
+.cache/
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Other editors
+*.swp
+*.swo
+*.swn
+*~
+*.*~
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+*.cover
+*.py,cover
+.cache
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+# Test artifacts
+*.mo
+*.pot
+*.pyo
+test-reports/
+tests/__pycache__/
+
+# Node.js dependencies (for frontend)
+node_modules/
+
+# Build files for web frameworks
+dist/
+build/
+*.html
+
+# Environment variables
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Celery beat schedule file
+celerybeat-schedule
+
+# Gunicorn logs
+gunicorn_error.log
