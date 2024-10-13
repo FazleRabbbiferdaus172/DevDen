@@ -67,6 +67,7 @@ static_root/
 # Pytest
 .cache/
 .pytest_cache/
+*.sesskey
 
 # Mypy
 .mypy_cache/
