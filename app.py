@@ -1,4 +1,5 @@
 from fasthtml.common import *
+import bcrypt
 
 db = database('data/den.db')
 class User:
@@ -7,7 +8,14 @@ class User:
     pwd:str
 
     def __ft__(self):
-        return Li(Span(self.id),Span('-'),Span(self.name), id=f'user-{self.id}')
+        column = Div(
+            *[Div(self.id ,cls='column has-text-centered is-capitalized'),
+              Div(self.name ,cls='column has-text-centered is-capitalized'),
+              Div(self.pwd ,cls='column has-text-centered is-capitalized'),
+              ],
+            cls='columns'
+        )
+        return column
 
 class Project:
     name:str
@@ -17,6 +25,14 @@ class Project:
 
 users = db.create(User)
 projects = db.create(Project)
+
+def hash_password(password: str):
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
+
+def check_password(user, password: str) -> bool:
+    return bcrypt.checkpw(password, user.pwd.encode('utf-8'))
 
 login_redir = RedirectResponse('/login', status_code=303)
 
@@ -29,11 +45,11 @@ def before(req, sess):
 def _not_found(req, exc):
     return (Title('Opppsss!'), Div('Page not found.'))
 
-bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.*\.css', r'/public/*', '/login', '/'])
+bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.*\.css', r'/public/*', '/signup','/login', '/'])
 css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}')
 hdrs=(
     Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
-    Style("html { height: 100%; margin: 0; overflow: hidden;} body { height: 100%; margin: 0;}")
+    Style("html { height: 100%; margin: 0; overflow: auto} body { height: 100%; margin: 0;}")
 )
 app,rt = fast_app(
                   pico=False,
@@ -52,6 +68,7 @@ def main_template(*args, **kwargs):
                         Div(
                                 A('Login', href='/login'),
                                 A('Logout', href='/logout'),
+                                A('Signup', href='/signup'),
                             cls='buttons'),
                         cls='navbar-item'
                     ),
@@ -61,11 +78,13 @@ def main_template(*args, **kwargs):
     )
     header = Header(nav)
     main = Main(args, cls='container')
-    footer = Footer('Footer', cls='footer mt-auto')
+    footer = Footer('Footer', cls='navbar is-fixed-bottom',)
     body = Body(  header,
                 Div(main,
-                  footer, cls="rows", style='display: flex;flex-direction: column;height: -webkit-fill-available;justify-content: center;')
-                ,cls='has-navbar-fixed-top')
+                  style='padding-bottom: var(--bulma-navbar-height);'
+                ),
+                footer,
+                cls='has-navbar-fixed-top has-navbar-fixed-bottom')
     web_client = (Title("Den"), 
                     body
                   )
@@ -79,17 +98,30 @@ def login():
     
     return main_template(frm)
 
+@app.get('/signup')
+def signup():
+    frm = Div(Form(Input(id='name', placeholder='Name', required=True),
+        Input(id='pwd', type='password', placeholder='Password', required=True),
+        Button('Signup'), action='/signup', method='post'))
+    
+    return main_template(frm)
+
 @dataclass
 class Login: name:str; pwd:str
+
+@app.post('/signup')
+def signup(signup:Login , sess):
+    signup.pwd = hash_password(signup.pwd)
+    u = users.insert(signup)
+    return RedirectResponse('/login', status_code=303)
 
 @app.post('/login')
 def post(login:Login , sess):
     u = users(where=f"name='{login.name}'", limit=1)
     # if not compare_digest(u.pwd.encode("utf-8"), login.pwd.encode("utf-8"))
-    if u and compare_digest(u[0].pwd.encode("utf-8"), login.pwd.encode("utf-8")):
+    if u and check_password(u[0], login.pwd.encode("utf-8")):
         sess['auth'] = u[0].name
     else:
-        u = users.insert(login)
         return RedirectResponse('/login', status_code=303)
     print(users())
     return RedirectResponse('/admin', status_code=303)
@@ -104,11 +136,21 @@ def admin_home(auth):
     return main_template(H1("Hello admin"))
 
 
+def template_list_view(table):
+    num_of_cols = len(users.columns)
+    title_col = Div(
+            *[Div(i.name ,cls='column has-text-centered is-capitalized') for i in users.columns],
+            cls='columns'
+        )
+    print(num_of_cols)
+    data_col = users()
+    return Div(title_col, *data_col, cls='block')
+
 @app.get('/')
 def Home(auth,session):
     try:
-        ul = (Ul(*users()))
-        return main_template(ul)
+        list_view = template_list_view(users)
+        return main_template(list_view)
     except NotFoundError:
         return main_template((
             H1("No Data")
