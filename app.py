@@ -98,6 +98,8 @@ def login():
     
     return main_template(frm)
 
+# app.router.add_route(path='/login', endpoint=login, methods=['get'], name='signup', include_in_schema=True)
+
 @app.get('/signup')
 def signup():
     frm = Div(Form(Input(id='name', placeholder='Name', required=True),
@@ -117,8 +119,8 @@ def signup(signup:Login , sess):
 
 @app.post('/login')
 def post(login:Login , sess):
+    # important: if the first argument is 'req' it holds the request informations
     u = users(where=f"name='{login.name}'", limit=1)
-    # if not compare_digest(u.pwd.encode("utf-8"), login.pwd.encode("utf-8"))
     if u and check_password(u[0], login.pwd.encode("utf-8")):
         sess['auth'] = u[0].name
     else:
