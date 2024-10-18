@@ -156,4 +156,6 @@ def Home(auth,session):
             H1("No Data")
         ))
 
+# Todo: auto list view of all tables in a db with predefined coulmns implementatoin
+
 serve()
