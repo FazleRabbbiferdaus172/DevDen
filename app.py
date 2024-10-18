@@ -133,20 +133,44 @@ def logout(sess):
     del sess['auth']
     return login_redir
 
+def find_all_tables():
+    all_tables = db.tables
+    return all_tables
+
+def generate_tables_view_cells(tables):
+    logging.debug(type(tables))
+    return [Div(t.name, cls="cell is-capitalized has-text-centered") for t in tables]
+
+def generate_tables_view_grid(tables):
+    cells = generate_tables_view_cells(tables)
+    return Div(Div(*cells, cls="grid"),cls="fixed-grid has-2cols")
+
 @app.get("/admin")
 def admin_home(auth):
-    return main_template(H1("Hello admin"))
+    tables = find_all_tables()
+    tables_grid = generate_tables_view_grid(tables)
+    return main_template(tables_grid)
+
+@app.get("/admin/{table_name}")
+def table_list_views(table_name: str):
+    try:
+        table = next((table for table in db.tables if table.name == table_name), None)
+        list_view = template_list_view(table=table)
+        return main_template(list_view)
+    except NotFoundError:
+        return main_template((
+            H1("No Data")
+        ))
 
 
 def template_list_view(table):
-    num_of_cols = len(users.columns)
-    title_col = Div(
-            *[Div(i.name ,cls='column has-text-centered is-capitalized') for i in users.columns],
-            cls='columns'
-        )
-    print(num_of_cols)
-    data_col = users()
-    return Div(title_col, *data_col, cls='block')
+    thead = Thead(Tr(
+            *[Th(i.name, cls="has-text-centered is-capitalized") for i in table.columns]
+        ))
+    tr_list =  table()
+    tbody = Tbody(*tr_list)
+    tfooter = Tfoot()
+    return Div(Table(thead, tbody, tfooter, cls="table is-striped is-hoverable table is-fullwidth"), cls='table-container')
 
 @app.get('/')
 def Home(auth,session):
