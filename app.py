@@ -12,12 +12,8 @@ class User:
     pwd:str
 
     def __ft__(self):
-        column = Div(
-            *[Div(self.id ,cls='column has-text-centered is-capitalized'),
-              Div(self.name ,cls='column has-text-centered is-capitalized'),
-              Div(self.pwd ,cls='column has-text-centered is-capitalized'),
-              ],
-            cls='columns'
+        column = Tr(
+            *[Td(i, cls="has-text-centered") for i in self.__dict__.values()]
         )
         return column
 
