@@ -1,5 +1,9 @@
 from fasthtml.common import *
 import bcrypt
+import logging
+
+logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} - {message}", style="{")
+
 
 db = database('data/den.db')
 class User:
