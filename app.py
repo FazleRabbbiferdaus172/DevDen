@@ -190,18 +190,6 @@ def logout(sess):
     del sess['auth']
     return login_redir
 
-def find_all_tables():
-    all_tables = db.tables
-    return all_tables
-
-def generate_tables_view_cells(tables):
-    logging.debug(type(tables))
-    return [Div(t.name, cls="cell is-capitalized has-text-centered") for t in tables]
-
-def generate_tables_view_grid(tables):
-    cells = generate_tables_view_cells(tables)
-    return Div(Div(*cells, cls="grid"),cls="fixed-grid has-2cols")
-
 @app.get("/admin")
 def admin_home(auth):
     tables = find_all_tables()
@@ -210,29 +198,33 @@ def admin_home(auth):
 
 @app.get("/admin/{table_name}")
 def table_list_views(table_name: str):
+    # Todo: if no table was found raise error
     try:
-        table = next((table for table in db.tables if table.name == table_name), None)
-        list_view = template_list_view(table=table)
+        table = get_table_by_name(table_name)
+        list_view = template_list_view(table=table, table_name=table_name)
         return main_template(list_view)
     except NotFoundError:
         return main_template((
             H1("No Data")
         ))
+    
+@app.get("/admin/{table_name}/new")
+def table_record_create_form(table_name: str):
+    # Todo: if no table was found raise error
+    table = get_table_by_name(table_name)
+    crate_form_view = template_record_create_form_view(table=table, table_name=table_name)
+    return main_template(crate_form_view)
 
-
-def template_list_view(table):
-    thead = Thead(Tr(
-            *[Th(i.name, cls="has-text-centered is-capitalized") for i in table.columns]
-        ))
-    tr_list =  table()
-    tbody = Tbody(*tr_list)
-    tfooter = Tfoot()
-    return Div(Table(thead, tbody, tfooter, cls="table is-striped is-hoverable table is-fullwidth"), cls='table-container')
+@app.post("/admin/{table_name}/new")
+def table_record_create_form(table_name: str, data: dict):
+    table = get_table_by_name(table_name)
+    u = table.insert(data)
+    return RedirectResponse(f'/admin/{table_name}', status_code=303)
 
 @app.get('/')
 def Home(auth,session):
     try:
-        list_view = template_list_view(users)
+        list_view = template_list_view(users, table_name='user')
         return main_template(list_view)
     except NotFoundError:
         return main_template((
