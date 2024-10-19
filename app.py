@@ -49,18 +49,6 @@ def before(req, sess):
 def _not_found(req, exc):
     return (Title('Opppsss!'), Div('Page not found.'))
 
-bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.*\.css', r'/public/*', '/signup','/login', '/'])
-css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}')
-hdrs=(
-    Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
-    Style("html { height: 100%; margin: 0; overflow: auto} body { height: 100%; margin: 0;}")
-)
-app,rt = fast_app(
-                  pico=False,
-                  before=bware, live=True,
-                  exception_handlers={404: _not_found},
-                  hdrs=hdrs)
-
 def main_template(*args, **kwargs):
     nav = Nav(
         Div(Span(kwargs.get('page_title', 'Den'), cls='is-size-3 has-text-centered has-text-justified is-uppercase'), cls="navbar-brand px-2"),
@@ -93,6 +81,71 @@ def main_template(*args, **kwargs):
                     body
                   )
     return web_client
+
+def find_all_tables():
+    all_tables = db.tables
+    return all_tables
+
+def get_table_by_name(name):
+    return next((table for table in db.tables if table.name == name), None)
+
+def generate_tables_view_cells(tables):
+    logging.debug(type(tables))
+    return [Div(t.name, cls="cell is-capitalized has-text-centered") for t in tables]
+
+def generate_tables_view_grid(tables):
+    cells = generate_tables_view_cells(tables)
+    return Div(Div(*cells, cls="grid"),cls="fixed-grid has-2cols")
+
+def template_list_view(table, table_name=None):
+    thead = Thead(Tr(
+            *[Th(i.name, cls="has-text-centered is-capitalized") for i in table.columns]
+        ))
+    tr_list =  table()
+    tbody = Tbody(*tr_list, 
+                  Tr(
+                      Td(
+                          A('Add New', href=f"/admin/{table_name}/new",cls="has-text-centered"),
+                          colspan=len(table.columns)
+                          )
+                      )
+                  )
+    tfooter = Tfoot()
+    return Div(Table(thead, tbody, tfooter, cls="table is-striped is-hoverable table is-fullwidth"), cls='table-container')
+
+def template_record_create_form_view(table, table_name=None):
+    '''
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="e.g Alex Smith">
+        </div>
+    </div>
+    '''
+    inputs = [
+        Div(
+            Label(col.name, cls='label is-capitalized'),
+            Div(
+                Input(id=col.name, placeholder=col.name, type="text")
+                ,cls='control'),
+            cls='field') 
+        for col in table.columns if col.name != 'id']
+    frm = Div(Form(*inputs,
+        Button('Create', cls='button is-primary'), action=f'/admin/{table_name}/new', method='post', cls='form'))
+    
+    return main_template(frm)
+
+bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.*\.css', r'/public/*', '/signup','/login', '/'])
+css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}')
+hdrs=(
+    Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
+    Style("html { height: 100%; margin: 0; overflow: auto} body { height: 100%; margin: 0;}")
+)
+app,rt = fast_app(
+                  pico=False,
+                  before=bware, live=True,
+                  exception_handlers={404: _not_found},
+                  hdrs=hdrs)
 
 @app.get('/login')
 def login():
