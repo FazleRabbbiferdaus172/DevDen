@@ -6,18 +6,22 @@ logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} 
 
 
 db = database('data/den.db')
-class User:
-    id:int
-    name:str
-    pwd:str
 
+class BaseForTable:
+    
     def __ft__(self):
         column = Tr(
             *[Td(i, cls="has-text-centered") for i in self.__dict__.values()]
         )
         return column
 
-class Project:
+class User(BaseForTable):
+    id:int
+    name:str
+    pwd:str
+
+class Project(BaseForTable):
+    id:int
     name:str
     des:str
     link:str
