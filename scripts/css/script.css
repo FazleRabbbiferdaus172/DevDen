@@ -1,0 +1,48 @@
+*,*::after, *::before {
+    margin: 0px;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    overflow: unset;
+}
+
+body {
+    box-sizing: border-box;
+    padding: 3.0rem;
+}
+
+.public {
+    width: calc(100vw - 6.5rem); 
+    height: calc(100vh - 6.5rem);
+    padding: 1rem;
+    border: 1px solid white;
+}
+
+.side-nav {
+    color: white;
+    display: block;
+}
+
+.side-nav:hover {
+    color: rgb(155, 154, 154);
+}
+
+.selected:hover {
+    color: white;
+}
+
+.side-nav.selected {
+    color: rgb(66, 66, 66);
+    text-decoration: underline;
+    border: none;
+}
+
+.is-pullued-bottom-right {
+    position: absolute;
+    right: calc(3.5rem);
+    bottom: calc(3.5rem);
+    padding-bottom: 2.5rem;
+    padding-right: 2.5rem;
+}
