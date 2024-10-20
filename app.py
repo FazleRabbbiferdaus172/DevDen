@@ -82,6 +82,19 @@ def main_template(*args, **kwargs):
                   )
     return web_client
 
+def main_public_template(*args, **kwargs):
+    nav = Nav(
+        A(Span('Home', cls='is-size-5 has-text-left'), cls="side-nav selected"),
+        A(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav"),
+        A(Span('Contact', cls='is-size-5 has-text-left'),  cls="side-nav"),
+        cls="block pt-5 pl-5",
+    )
+    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Web Developer.', cls='subtitle is-4'), nav, cls='block')
+    main = Main(Div(H3('Jibris'),cls='block content is-normal is-pullued-bottom-right'))
+    body = Body(Div(header, main, cls="public")
+    )
+    return body
+
 def find_all_tables():
     all_tables = db.tables
     return all_tables
@@ -139,7 +152,8 @@ bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.
 css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}')
 hdrs=(
     Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
-    Style("html { height: 100%; margin: 0; overflow: auto} body { height: 100%; margin: 0;}")
+    Link(rel='stylesheet', href='./scripts/css/script.css', type='text/css'),
+    Script(src='./scripts/js/main.js', defer=True)
 )
 app,rt = fast_app(
                   pico=False,
@@ -224,10 +238,9 @@ def table_record_create_form(table_name: str, data: dict):
 @app.get('/')
 def Home(auth,session):
     try:
-        list_view = template_list_view(users, table_name='user')
-        return main_template(list_view)
+        return main_public_template()
     except NotFoundError:
-        return main_template((
+        return main_public_template((
             H1("No Data")
         ))
 
