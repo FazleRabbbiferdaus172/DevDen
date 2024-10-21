@@ -159,7 +159,8 @@ app,rt = fast_app(
                   pico=False,
                   before=bware, live=True,
                   exception_handlers={404: _not_found},
-                  hdrs=hdrs)
+                  hdrs=hdrs,
+                  htmlkw={'class': 'theme-dark'})
 
 @app.get('/login')
 def login():
