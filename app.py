@@ -82,10 +82,26 @@ def main_template(*args, **kwargs):
                   )
     return web_client
 
+def generate_infnite_scroll_list_public(table_name, idx):
+    table = get_table_by_name(table_name)
+    projects = table()
+    list_projects = [Div(Span(t.name, cls="title is-5 custom-block is-capitalized"), 
+             Span(t.des, cls="custom-block is-capitalized"),
+             Span(t.link, cls="custom-block"),
+             cls='block') 
+             for t in projects]
+    # list_projects[-1].attrs.update({
+    #     'get': 'project/page',
+    #     'hx-trigger': 'revealed',
+    #     'hx-swap': 'afterend'
+    # })
+    return list_projects
+
 def main_public_template(*args, **kwargs):
     nav = Nav(
         A(Span('Home', cls='is-size-5 has-text-left'), cls="side-nav selected"),
-        A(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav"),
+        Span(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav", hx_get=f'project/page?idx={1}', 
+          hx_trigger='click',hx_target='#main-content-right',hx_swap='innerHtml'),
         A(Span('Contact', cls='is-size-5 has-text-left'),  cls="side-nav"),
         cls="block pt-5 pl-5",
     )
@@ -256,6 +272,10 @@ def Home(auth,session):
         return main_public_template((
             H1("No Data")
         ))
+
+@app.get("/project/page/")
+def project(idx:int|None = 0):
+    return generate_infnite_scroll_list_public('project', idx)
 
 # Todo: auto list view of all tables in a db with predefined coulmns implementatoin
 
