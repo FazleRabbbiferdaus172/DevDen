@@ -89,8 +89,20 @@ def main_public_template(*args, **kwargs):
         A(Span('Contact', cls='is-size-5 has-text-left'),  cls="side-nav"),
         cls="block pt-5 pl-5",
     )
-    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Web Developer.', cls='subtitle is-4'), nav, cls='block')
-    main = Main(Div(H3('Jibris'),cls='block content is-normal is-pullued-bottom-right'))
+    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Software Enginner', cls='subtitle is-4'), nav, cls='block')
+    # projects = generate_infnite_scroll_list_public('project')
+    main = Main(
+                Div(
+                    Div(
+                        *[Span("About Me -", cls='title is-capitalized is-5'),
+                        Span("From Dhaka, Bangladesh -", cls='custom-block has-text-weight-semibold'),
+                        Span("Currently working at Brain Station 23 Plc. -", cls='custom-block has-text-weight-semibold'),
+                        Span("Enjoys building things and swimming -", cls='custom-block has-text-weight-semibold')],
+                        # *projects,
+                        id="main-content-right"
+                    ),
+                cls='block content is-normal is-pullued-bottom-right')
+                )
     body = Body(Div(header, main, cls="public")
     )
     return body
