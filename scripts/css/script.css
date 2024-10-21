@@ -25,6 +25,10 @@ body {
     display: block;
 }
 
+.custom-block {
+    display: block;
+}
+
 .side-nav:hover {
     color: rgb(155, 154, 154);
 }
@@ -40,9 +44,13 @@ body {
 }
 
 .is-pullued-bottom-right {
+    width: calc(40vw); 
+    max-height: calc(100vh - 6.5rem);
+    text-align: end;
     position: absolute;
     right: calc(3.5rem);
     bottom: calc(3.5rem);
     padding-bottom: 2.5rem;
     padding-right: 2.5rem;
+    overflow-y: auto;
 }
