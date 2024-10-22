@@ -101,35 +101,54 @@ def generate_infnite_scroll_list_public(table_name, part_num):
                 Span(t.link, cls="custom-block"),
                 cls='block',
                 get=f'page?idx={part_num + 1}',
-                hx_trigger='intersect root:.is-pullued-bottom-right once',
+                hx_trigger='intersect threshold:0.5 root:.is-pullued-bottom-right once',
                 hx_swap='afterend'
                 )
             )
     return list_projects
 
+def generate_about_section_public():
+    return [Span("About Me -", cls='title is-capitalized is-5'),
+                        Span("From Dhaka, Bangladesh -", cls='custom-block has-text-weight-semibold'),
+                        Span("Currently working at Brain Station 23 Plc. -", cls='custom-block has-text-weight-semibold'),
+                        Span("Enjoys building things and swimming -", cls='custom-block has-text-weight-semibold')]
+
+def generate_how_to_reach_public():
+        return [Span("Contact Me -", cls='title is-capitalized is-5'),
+                        Span("Email: fazle.ferdaus1416@gmail.com -", cls='custom-block has-text-weight-semibold'),
+                        Span("Phone: +880 1968628234 -", cls='custom-block has-text-weight-semibold'),
+                        Span("Address: House#34, Road#7, Block#E, Mirpur-12, Dhaka, Bangladesh -", cls='custom-block has-text-weight-semibold')]
+
 def main_public_template(*args, **kwargs):
-    nav = Nav(
-        A(Span('Home', cls='is-size-5 has-text-left'), cls="side-nav selected"),
-        Span(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav", hx_get=f'project/page?idx={1}', 
-          hx_trigger='click',hx_target='#main-content-right',hx_swap='innerHtml'),
-        A(Span('Contact', cls='is-size-5 has-text-left'),  cls="side-nav"),
-        cls="block pt-5 pl-5",
+    icon_list = Div(
+        I(cls="fab fa-github fa-2x block link"),
+        I(cls="fab fa-linkedin-in fa-2x block link"),
+        I(cls="fab fa-facebook fa-2x block link"),
+        cls="public-links"
     )
-    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Software Enginner', cls='subtitle is-4'), nav, cls='block')
+    nav = Nav(
+        A(Span('Home', cls='is-size-5 has-text-left'), cls="side-nav selected", hx_get=f'about/page',
+          hx_trigger='click',hx_target='#main-content-right',hx_swap='innerHtml'),
+        Span(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav", hx_get=f'project/page?idx={1}',
+          hx_trigger='click',hx_target='#main-content-right',hx_swap='innerHtml'),
+        A(Span('How to reach me', cls='is-size-5 has-text-left'),  cls="side-nav", hx_get=f'contact/page',
+          hx_trigger='click',hx_target='#main-content-right',hx_swap='innerHtml'),
+        cls="block pt-5 pl-5 public-nav",
+    )
+    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Software Enginner', cls='subtitle is-4'), nav, cls='block public-header')
+    about_me_section = generate_about_section_public()
     # projects = generate_infnite_scroll_list_public('project')
     main = Main(
                 Div(
                     Div(
-                        *[Span("About Me -", cls='title is-capitalized is-5'),
-                        Span("From Dhaka, Bangladesh -", cls='custom-block has-text-weight-semibold'),
-                        Span("Currently working at Brain Station 23 Plc. -", cls='custom-block has-text-weight-semibold'),
-                        Span("Enjoys building things and swimming -", cls='custom-block has-text-weight-semibold')],
+                        *about_me_section,
                         # *projects,
                         id="main-content-right"
                     ),
                 cls='block content is-normal is-pullued-bottom-right')
                 )
-    body = Body(Div(header, main, cls="public")
+    footer = Footer(icon_list, cls="public-footer")
+    body = (Title("Ferdaus's Den"),Body(Div(header, main, cls="public"), footer)
     )
     return body
 
@@ -191,7 +210,8 @@ css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}
 hdrs=(
     Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
     Link(rel='stylesheet', href='./scripts/css/script.css', type='text/css'),
-    Script(src='./scripts/js/main.js', defer=True)
+    Script(src='./scripts/js/main.js', defer=True),
+    Script(src="https://kit.fontawesome.com/7dfe397011.js", crossorigin="anonymous")
 )
 app,rt = fast_app(
                   pico=False,
@@ -286,6 +306,14 @@ def Home(auth,session):
 @app.get("/project/page/")
 def project(idx:int|None = 0):
     return generate_infnite_scroll_list_public('project', idx)
+
+@app.get("/about/page/")
+def about(idx:int|None = 0):
+    return generate_about_section_public()
+
+@app.get("/contact/page/")
+def contact(idx:int|None = 0):
+    return generate_how_to_reach_public()
 
 # Todo: auto list view of all tables in a db with predefined coulmns implementatoin
 
