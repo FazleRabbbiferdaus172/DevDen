@@ -4,3 +4,7 @@
    ```
     def post(req , sess):
    ```
+3. Mentioned in the htmx documents [Refer to this](https://htmx.org/attributes/hx-trigger/#non-standard-events)
+```
+If you are using overflow in css like overflow-y: scroll you should use intersect once instead of revealed
+```
