@@ -82,19 +82,29 @@ def main_template(*args, **kwargs):
                   )
     return web_client
 
-def generate_infnite_scroll_list_public(table_name, idx):
+def generate_infnite_scroll_list_public(table_name, part_num):
     table = get_table_by_name(table_name)
     projects = table()
-    list_projects = [Div(Span(t.name, cls="title is-5 custom-block is-capitalized"), 
-             Span(t.des, cls="custom-block is-capitalized"),
-             Span(t.link, cls="custom-block"),
-             cls='block') 
-             for t in projects]
-    # list_projects[-1].attrs.update({
-    #     'get': 'project/page',
-    #     'hx-trigger': 'revealed',
-    #     'hx-swap': 'afterend'
-    # })
+    list_projects = []
+    for i, t in enumerate(projects):
+        if i < len(projects) - 1:
+            list_projects.append(
+                Div(Span(t.name, cls="title is-5 custom-block is-capitalized"), 
+                Span(t.des, cls="custom-block is-capitalized"),
+                Span(t.link, cls="custom-block"),
+                cls='block') 
+            )
+        elif i == len(projects) - 1:
+            list_projects.append(
+                Div(Span(t.name, cls="title is-5 custom-block is-capitalized"), 
+                Span(t.des, cls="custom-block is-capitalized"),
+                Span(t.link, cls="custom-block"),
+                cls='block',
+                get=f'page?idx={part_num + 1}',
+                hx_trigger='intersect root:.is-pullued-bottom-right once',
+                hx_swap='afterend'
+                )
+            )
     return list_projects
 
 def main_public_template(*args, **kwargs):
@@ -176,7 +186,7 @@ def template_record_create_form_view(table, table_name=None):
     
     return main_template(frm)
 
-bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.*\.css', r'/public/*', '/signup','/login', '/'])
+bware = Beforeware(before, skip=[r'/favicon\.ico', r'/static/.*', r'.*\.js', r'.*\.css', r'/public/*', '/signup','/login', '/', '/project/page/', '/page/'])
 css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}')
 hdrs=(
     Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
@@ -278,5 +288,9 @@ def project(idx:int|None = 0):
     return generate_infnite_scroll_list_public('project', idx)
 
 # Todo: auto list view of all tables in a db with predefined coulmns implementatoin
+
+@rt("/page/", name="page")
+def get(idx:int|None = 0):
+    return generate_infnite_scroll_list_public('project', idx)
 
 serve()
