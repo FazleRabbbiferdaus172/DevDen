@@ -20,6 +20,11 @@ body {
     border: 1px solid white;
 }
 
+.public-nav {
+    position: relative;
+    z-index: 100;
+}
+
 .side-nav {
     color: white;
     display: block;
@@ -44,13 +49,55 @@ body {
 }
 
 .is-pullued-bottom-right {
-    width: calc(40vw); 
-    max-height: calc(100vh - 6.5rem);
+    max-width: calc(100vw - 3.0rem); 
+    min-width: calc(80vw);
+    max-height: calc(100vh - 10rem);
     text-align: end;
     position: absolute;
     right: calc(3.5rem);
-    bottom: calc(3.5rem);
+    bottom: calc(5rem);
     padding-bottom: 2.5rem;
     padding-right: 2.5rem;
     overflow-y: auto;
+}
+
+*::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: none;
+}
+
+*::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: none;
+}
+
+*::-webkit-scrollbar-thumb
+{
+	background-color: white;
+	border: none;
+}
+
+.public-footer
+{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    float: right;
+    height: 100vh;
+    top: 0%;
+    left: .50rem;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 3.5rem;
+}
+
+.public-links{
+    display: flex;
+    flex-direction: column;
+}
+
+.public-links > .link:hover{
+    color: white;
 }
