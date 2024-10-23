@@ -115,9 +115,9 @@ def generate_about_section_public():
 
 def generate_how_to_reach_public():
         return [Span("Contact Me -", cls='title is-capitalized is-5'),
-                        Span("Email: fazle.ferdaus1416@gmail.com -", cls='custom-block has-text-weight-semibold'),
-                        Span("Phone: +880 1968628234 -", cls='custom-block has-text-weight-semibold'),
-                        Span("Address: House#34, Road#7, Block#E, Mirpur-12, Dhaka, Bangladesh -", cls='custom-block has-text-weight-semibold')]
+                        Span(Span("fazle.ferdaus1416@gmail.com "), Span(I(cls="fas fa-envelope"), Span(" -")), cls='custom-block has-text-weight-semibold'),
+                        Span(Span("+880 1968628234 "), Span(I(cls="fas fa-phone")), Span(" -"),cls='custom-block has-text-weight-semibold'),
+                        Span(Span("House#34, Road#7, Block#E, Mirpur-12, Dhaka, Bangladesh "), Span(I(cls="fas fa-map-pin")), Span(" -"), cls='custom-block has-text-weight-semibold')]
 
 def main_public_template(*args, **kwargs):
     icon_list = Div(
@@ -135,7 +135,7 @@ def main_public_template(*args, **kwargs):
           hx_trigger='click',hx_target='#main-content-right',hx_swap='innerHtml'),
         cls="block pt-5 pl-5 public-nav",
     )
-    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Software Enginner', cls='subtitle is-4'), nav, cls='block public-header')
+    header = Header(H1('Fazle Rabbi Ferdaus',cls='title is-1'), H2('Software Enginner', cls='subtitle is-4'), nav, cls='block public-header public-section-left')
     about_me_section = generate_about_section_public()
     # projects = generate_infnite_scroll_list_public('project')
     main = Main(
@@ -145,7 +145,7 @@ def main_public_template(*args, **kwargs):
                         # *projects,
                         id="main-content-right"
                     ),
-                cls='block content is-normal is-pullued-bottom-right')
+                cls='block content is-normal is-pullued-bottom-right public-section-right')
                 )
     footer = Footer(icon_list, cls="public-footer")
     body = (Title("Ferdaus's Den"),Body(Div(header, main, cls="public"), footer)
