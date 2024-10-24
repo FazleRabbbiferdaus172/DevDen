@@ -139,7 +139,19 @@ body {
 }
 
 .public-links > .link:hover{
+    color: rgb(131, 131, 131);
+}
+
+.public-links > a {
     color: white;
+}
+
+.link {
+    padding-top: .5rem;
+}
+
+.public-links > a:visited {
+    color: none;
 }
 
 @media all and (min-width: 1024px) and (max-width: 1280px) {
@@ -187,7 +199,7 @@ body {
         --base-public-width-half: calc((var(--base-public-width)/2) - (var(--base-public-padding)/2));
         --base-public-height-half: calc(var(--base-public-height)/2);
         --base-public-height-quater: calc(var(--base-public-height)/3);
-    }
+    } 
 
     .public-section-left {
         height: calc(var(--base-public-height-half) - var(--base-public-padding));
@@ -208,5 +220,27 @@ body {
 
     .public { 
         border-image: none;
+    }
+    
+    .public-footer {
+        align-items: center;
+    }
+
+    .public-links {
+        flex-direction: row;
+    }
+
+    .link {
+        padding-right: .3rem;
+        padding-top: 0;
+        padding-bottom: .5rem;
+    }
+
+    .public-footer > .public-links > .link:nth-child(1) {
+        padding-left: .5rem;
+    }
+
+    .public-nav {
+        z-index: 100;
     }
  }
