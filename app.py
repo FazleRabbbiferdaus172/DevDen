@@ -2,33 +2,9 @@ from fasthtml.common import *
 import bcrypt
 import logging
 
+from db import db, users, projects
+
 logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} - {message}", style="{")
-
-
-db = database('data/den.db')
-
-class BaseForTable:
-    
-    def __ft__(self):
-        column = Tr(
-            *[Td(i, cls="has-text-centered") for i in self.__dict__.values()]
-        )
-        return column
-
-class User(BaseForTable):
-    id:int
-    name:str
-    pwd:str
-
-class Project(BaseForTable):
-    id:int
-    name:str
-    des:str
-    link:str
-    type:str
-
-users = db.create(User)
-projects = db.create(Project)
 
 def hash_password(password: str):
     salt = bcrypt.gensalt()
