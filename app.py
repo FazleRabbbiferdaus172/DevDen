@@ -126,9 +126,9 @@ def generate_how_to_reach_public():
 
 def main_public_template(*args, **kwargs):
     icon_list = Div(
-        I(cls="fab fa-github fa-2x block link"),
-        I(cls="fab fa-linkedin-in fa-2x block link"),
-        I(cls="fab fa-facebook fa-2x block link"),
+        A(I(cls="fab fa-github fa-2x block link"), cls="link", href="https://github.com/FazleRabbbiferdaus172"),
+        A(I(cls="fab fa-linkedin-in fa-2x block link"),  cls="link", href="https://www.linkedin.com/in/fazle-rabbi-ferdaus-113255185/"),
+        A(I(cls="fab fa-facebook fa-2x block link"), cls="link", href="https://www.facebook.com/FazleRabbiFerdaus/"),
         cls="public-links"
     )
     nav = Nav(
