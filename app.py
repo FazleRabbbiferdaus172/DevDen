@@ -82,21 +82,26 @@ def main_template(*args, **kwargs):
                   )
     return web_client
 
-def generate_infnite_scroll_list_public(table_name, part_num):
+def generate_infnite_scroll_list_public(table_name, part_num=0):
     table = get_table_by_name(table_name)
     projects = table()
     list_projects = []
+    if part_num == 0:
+        list_projects.append(
+                    Div(Span("Projects" + " -", cls="title is-4 custom-block is-capitalized"),
+                    cls='block') 
+                )
     for i, t in enumerate(projects):
         if i < len(projects) - 1:
             list_projects.append(
-                Div(Span(t.name, cls="title is-5 custom-block is-capitalized"), 
+                Div(Span(t.name + " -", cls="title is-5 custom-block is-capitalized"), 
                 Span(t.des, cls="custom-block is-capitalized"),
                 Span(t.link, cls="custom-block"),
                 cls='block') 
             )
         elif i == len(projects) - 1:
             list_projects.append(
-                Div(Span(t.name, cls="title is-5 custom-block is-capitalized"), 
+                Div(Span(t.name + " -", cls="title is-5 custom-block is-capitalized"), 
                 Span(t.des, cls="custom-block is-capitalized"),
                 Span(t.link, cls="custom-block"),
                 cls='block',
@@ -115,7 +120,7 @@ def generate_about_section_public():
 
 def generate_how_to_reach_public():
         return [Span("Contact Me -", cls='title is-capitalized is-5'),
-                        Span(Span("fazle.ferdaus1416@gmail.com "), Span(I(cls="fas fa-envelope"), Span(" -")), cls='custom-block has-text-weight-semibold'),
+                        Span(Span("fazle.ferdaus1416@gmail.com "), Span(I(cls="fas fa-envelope")), Span(" -"), cls='custom-block has-text-weight-semibold'),
                         Span(Span("+880 1968628234 "), Span(I(cls="fas fa-phone")), Span(" -"),cls='custom-block has-text-weight-semibold'),
                         Span(Span("House#34, Road#7, Block#E, Mirpur-12, Dhaka, Bangladesh "), Span(I(cls="fas fa-map-pin")), Span(" -"), cls='custom-block has-text-weight-semibold')]
 
