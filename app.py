@@ -2,7 +2,12 @@ from fasthtml.common import *
 import bcrypt
 import logging
 
-from db import db, users, projects
+from models.db import db
+from models.user import users
+from models.project import projects
+from models.profile import profiles
+from models.work_experience import work_experiences
+from models.social_media_link import social_media_lniks
 
 logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} - {message}", style="{")
 
@@ -141,8 +146,7 @@ def get_table_by_name(name):
     return next((table for table in db.tables if table.name == name), None)
 
 def generate_tables_view_cells(tables):
-    logging.debug(type(tables))
-    return [Div(t.name, cls="cell is-capitalized has-text-centered") for t in tables]
+    return [Div(A(t.name, href=f"/admin/{t.name}"), cls="cell is-capitalized has-text-centered") for t in tables]
 
 def generate_tables_view_grid(tables):
     cells = generate_tables_view_cells(tables)
@@ -196,7 +200,7 @@ hdrs=(
 )
 app,rt = fast_app(
                   pico=False,
-                  before=bware, live=True,
+                  before=bware, live=False,
                   exception_handlers={404: _not_found},
                   hdrs=hdrs,
                   htmlkw={'class': 'theme-dark'})
@@ -233,7 +237,7 @@ def post(login:Login , sess):
     # important: if the first argument is 'req' it holds the request informations
     u = users(where=f"name='{login.name}'", limit=1)
     if u and check_password(u[0], login.pwd.encode("utf-8")):
-        sess['auth'] = u[0].name
+        sess['auth'] = u[0].id
     else:
         return RedirectResponse('/login', status_code=303)
     print(users())
