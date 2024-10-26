@@ -9,6 +9,8 @@ from models.profile import profiles
 from models.work_experience import work_experiences
 from models.social_media_link import social_media_lniks
 
+from routes.login import get_dummy_routes
+
 logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} - {message}", style="{")
 
 def hash_password(password: str):
@@ -205,15 +207,9 @@ app,rt = fast_app(
                   hdrs=hdrs,
                   htmlkw={'class': 'theme-dark'})
 
-@app.get('/login')
-def login():
-    frm = Div(Form(Input(id='name', placeholder='Name', required=True),
-        Input(id='pwd', type='password', placeholder='Password', required=True),
-        Button('login'), action='/login', method='post'))
-    
-    return main_template(frm)
 
 # app.router.add_route(path='/login', endpoint=login, methods=['get'], name='signup', include_in_schema=True)
+get_dummy_routes()
 
 @app.get('/signup')
 def signup():
@@ -306,4 +302,6 @@ def contact(idx:int|None = 0):
 def get(idx:int|None = 0):
     return generate_infnite_scroll_list_public('project', idx)
 
-serve()
+
+if __name__ == '__main__':
+    serve()
