@@ -1,9 +1,12 @@
-from fasthtml.components import Div
+from fasthtml.common import *
+from fasthtml.core import APIRouter
 
-def get_dummy_routes():
-    from app import app
-    
-    @app.get('/dummy')
-    def dummy():
-        return Div("Hello dummy")
-    
+login_router = APIRouter()
+
+# @login_router.get('/dummy')
+# def get_dummy():
+#     return ("Dummy")
+
+@login_router(path='/dummy', methods=['get'])
+def get_dummy():
+    return ("Dummy")
