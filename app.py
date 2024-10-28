@@ -8,18 +8,11 @@ from models.project import projects
 from models.profile import profiles
 from models.work_experience import work_experiences
 from models.social_media_link import social_media_lniks
+from utils.password_utils import *
 
 from routes.login import login_router
 
 logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} - {message}", style="{")
-
-def hash_password(password: str):
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed.decode('utf-8')
-
-def check_password(user, password: str) -> bool:
-    return bcrypt.checkpw(password, user.pwd.encode('utf-8'))
 
 login_redir = RedirectResponse('/login', status_code=303)
 
@@ -212,14 +205,6 @@ login_router.to_app(app)
 # app.router.add_route(path='/login', endpoint=login, methods=['get'], name='signup', include_in_schema=True)
 # get_dummy_routes()
 
-@app.get('/login')
-def login():
-    frm = Div(Form(Input(id='name', placeholder='Name', required=True),
-        Input(id='pwd', type='password', placeholder='Password', required=True),
-        Button('login'), action='/login', method='post'))
-    
-    return main_template(frm)
-
 @app.get('/signup')
 def signup():
     frm = Div(Form(Input(id='name', placeholder='Name', required=True),
@@ -236,17 +221,6 @@ def signup(signup:Login , sess):
     signup.pwd = hash_password(signup.pwd)
     u = users.insert(signup)
     return RedirectResponse('/login', status_code=303)
-
-@app.post('/login')
-def post(login:Login , sess):
-    # important: if the first argument is 'req' it holds the request informations
-    u = users(where=f"name='{login.name}'", limit=1)
-    if u and check_password(u[0], login.pwd.encode("utf-8")):
-        sess['auth'] = u[0].id
-    else:
-        return RedirectResponse('/login', status_code=303)
-    print(users())
-    return RedirectResponse('/admin', status_code=303)
 
 @app.get("/logout")
 def logout(sess):
