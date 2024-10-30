@@ -11,6 +11,7 @@ from models.social_media_link import social_media_lniks
 from utils.password_utils import *
 
 from routes.login import login_router
+from routes.signup import signup_router
 
 from templates.main_admin_template import main_template
 from templates.main_public_template import main_public_template, generate_how_to_reach_public, generate_about_section_public
@@ -90,26 +91,10 @@ app,rt = fast_app(
                   htmlkw={'class': 'theme-dark'})
 
 login_router.to_app(app)
+signup_router.to_app(app)
 
 # app.router.add_route(path='/login', endpoint=login, methods=['get'], name='signup', include_in_schema=True)
 # get_dummy_routes()
-
-@app.get('/signup')
-def signup():
-    frm = Div(Form(Input(id='name', placeholder='Name', required=True),
-        Input(id='pwd', type='password', placeholder='Password', required=True),
-        Button('Signup'), action='/signup', method='post'))
-    
-    return main_template(frm)
-
-@dataclass
-class Login: name:str; pwd:str
-
-@app.post('/signup')
-def signup(signup:Login , sess):
-    signup.pwd = hash_password(signup.pwd)
-    u = users.insert(signup)
-    return RedirectResponse('/login', status_code=303)
 
 @app.get("/logout")
 def logout(sess):
