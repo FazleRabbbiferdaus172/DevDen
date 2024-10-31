@@ -8,9 +8,12 @@ from models.project import projects
 from models.profile import profiles
 from models.work_experience import work_experiences
 from models.social_media_link import social_media_lniks
+
 from utils.password_utils import *
+from utils.redirect_uits import login_redir
 
 from routes.login import login_router
+from routes.logout import logout_router
 from routes.signup import signup_router
 
 from templates.main_admin_template import main_template
@@ -20,7 +23,7 @@ from templates.form_view import template_record_create_form_view
 
 logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} - {message}", style="{")
 
-login_redir = RedirectResponse('/login', status_code=303)
+# login_redir = RedirectResponse('/login', status_code=303)
 
 def before(req, sess):
     auth = req.scope['auth'] =  sess.get('auth', None)
@@ -92,14 +95,7 @@ app,rt = fast_app(
 
 login_router.to_app(app)
 signup_router.to_app(app)
-
-# app.router.add_route(path='/login', endpoint=login, methods=['get'], name='signup', include_in_schema=True)
-# get_dummy_routes()
-
-@app.get("/logout")
-def logout(sess):
-    del sess['auth']
-    return login_redir
+logout_router.to_app(app)
 
 @app.get("/admin")
 def admin_home(auth):
