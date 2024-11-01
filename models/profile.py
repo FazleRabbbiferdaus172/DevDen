@@ -11,5 +11,4 @@ class Profile(BaseModel):
     user_id:int
 
 
-profiles = db.create(Profile)
-
+profiles = db.create(Profile, foreign_keys=[("user_id", "user", "id")], not_null=['user_id', 'name', 'title', 'bio', 'phone_no'], if_not_exists=True)
