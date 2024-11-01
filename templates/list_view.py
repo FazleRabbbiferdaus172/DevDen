@@ -1,6 +1,6 @@
 from fasthtml.components import *
 
-def template_list_view(table, table_name=None):
+def template_list_view(table, table_name=None, row_clickable=True):
     thead = Thead(Tr(
             *[Th(i.name, cls="has-text-centered is-capitalized") for i in table.columns]
         ))
