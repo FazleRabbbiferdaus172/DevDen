@@ -8,4 +8,7 @@ class SocialMediaLnik(BaseModel):
     profile_id:int
     Platform_image_data: bytes
 
-social_media_lniks = db.create(SocialMediaLnik)
+social_media_lniks = db.create(SocialMediaLnik,
+                           foreign_keys=[("profile_id", "profile", "id")],
+                           not_null=['profile_id', 'platform_name', 'link'],
+                           if_not_exists=True)

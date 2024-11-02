@@ -12,4 +12,7 @@ class WorkExperience(BaseModel):
     profile_id:int
 
 
-work_experiences = db.create(WorkExperience)
+work_experiences = db.create(WorkExperience,
+                           foreign_keys=[("profile_id", "profile", "id")],
+                           not_null=['company_name', 'jod_title', 'desciption', 'profile_id'],
+                           if_not_exists=True)
