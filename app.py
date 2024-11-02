@@ -3,8 +3,8 @@ import logging
 
 from models.db import db
 from models.user import users
-from models.project import projects
 from models.profile import profiles
+from models.project import projects
 from models.work_experience import work_experiences
 from models.social_media_link import social_media_lniks
 
