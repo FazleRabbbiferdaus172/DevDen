@@ -4,7 +4,7 @@ def main_template(*args, **kwargs):
     nav = Nav(
         Div(Span(kwargs.get('page_title', 'Den'), cls='is-size-3 has-text-centered has-text-justified is-uppercase'), cls="navbar-brand px-2"),
         Div(
-            *(A(menu, cls='navbar-item px-1') for menu in kwargs.get('menus', ['Home'])),
+            *(A(menu, href=m_link ,cls='navbar-item px-1') for menu,m_link in kwargs.get('menus', [('Home', '/admin')])),
             cls='navbar-start'),
         Div(
                 Div(
