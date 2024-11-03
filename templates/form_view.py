@@ -38,7 +38,7 @@ def template_record_create_form_view(table, table_name=None):
                     Div(
                         Select(
                             *[Option(rec.name, value=rec.id) for rec in relational_recs],
-                            required=required)
+                            required=required, id=col.name)
                         ,cls='select'),
                     cls='field')
         inputs.append(input)
