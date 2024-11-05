@@ -6,27 +6,6 @@ from utils.table_utils import *
 
 valid_modes = ['create', 'edit', 'read']
 
-
-def get_all_records_of_raltional_field(table, columns=['id', 'name']):
-    relational_recs = table()
-    return relational_recs
-
-def form_related_fields(table):
-    foreign_keys_column = []
-    foreign_keys_column_table_dict = {}
-    foreign_keys_column_records_dict = {}
-
-    for key in table.foreign_keys:
-        foreign_keys_column.append(key.column)
-        foreign_keys_column_table_dict[key.column] = get_table_by_name(key.other_table)
-        foreign_keys_column_records_dict[key.column] = get_all_records_of_raltional_field(foreign_keys_column_table_dict[key.column])
-    
-    return {
-        'foreign_keys_column': foreign_keys_column,
-        'foreign_keys_column_table_dict': foreign_keys_column_table_dict,
-        'foreign_keys_column_records_dict': foreign_keys_column_records_dict
-    }
-
 def get_form_input(col, mode='create', record=None, required=False, field_type=None):
     value = None
     if record:
@@ -34,7 +13,7 @@ def get_form_input(col, mode='create', record=None, required=False, field_type=N
     return Input(id=col.name, value=value, required=required, type="text")
 
 def form_fields(table, table_name=None, mode='create', record=None):
-    form_related_fields_dict = form_related_fields(table=table)
+    form_related_fields_dict = get_table_related_fields(table=table)
     field_list = []
     for col in table.columns:
         if col.is_pk:
@@ -73,6 +52,7 @@ def template_record_create_form_view(table, table_name=None):
 
 def template_record_edit_form_view(table, table_name=None, record=None):
     record = record.__dict__
+    id = record['id']
     inputs = form_fields(table=table, table_name=table_name, mode='create', record=record)
     frm = Div(Form(*inputs,
         Button('Update', cls='button is-primary'), action=f'/admin/{table_name}/{id}', method='post', cls='form'))
