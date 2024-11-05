@@ -6,7 +6,7 @@ from utils.table_utils import *
 from templates.main_admin_template import main_template
 from templates.grid_view import generate_tables_view_grid
 from templates.list_view import template_list_view
-from templates.form_view import template_record_create_form_view, template_record_edit_form_view
+from templates.form_view import template_form_view
 from utils.redirect_uits import RedirectResponse
 
 admin_routes = APIRouter()
@@ -34,22 +34,17 @@ def table_list_views(table_name: str):
 # @app.get("/admin/{table_name}/new")
 @admin_routes(path="/admin/{table_name}/new", methods=['get'])
 def table_record_create_form(table_name: str):
-    # Todo: if no table was found raise error
-    table = get_table_by_name(table_name)
-    crate_form_view = template_record_create_form_view(table=table, table_name=table_name)
-    return main_template(crate_form_view)
+    form_view = template_form_view(table_name=table_name, mode='create')
+    return main_template(form_view)
 
 @admin_routes(path="/admin/{table_name}/{id}", methods=['get'])
 def table_record_create_form(table_name: str, id: int):
-    # Todo: if no table was found raise error
-    table = get_table_by_name(table_name)
-    record = table[id]
-    crate_form_view = template_record_edit_form_view(table=table, table_name=table_name, record=record)
-    return main_template(crate_form_view)
+    form_view = template_form_view(table_name=table_name, mode='edit', record_id=id)
+    return main_template(form_view)
 
 # @app.post("/admin/{table_name}/new")
 @admin_routes(path="/admin/{table_name}/new", methods=['post'])
 def table_record_create_form(table_name: str, data: dict):
     table = get_table_by_name(table_name)
-    u = table.insert(data)
+    table.insert(data)
     return RedirectResponse(f'/admin/{table_name}', status_code=303)
