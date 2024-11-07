@@ -24,7 +24,7 @@ def generate_infnite_scroll_list_public(table_name, part_num=0):
                 Span(t.des, cls="custom-block is-capitalized"),
                 Span(t.link, cls="custom-block"),
                 cls='block',
-                get=f'page?idx={part_num + 1}',
+                hx_get=f'{table_name}/page/?idx={part_num + 1}',
                 hx_trigger='intersect threshold:0.5 root:.is-pullued-bottom-right once',
                 hx_swap='afterend'
                 )
