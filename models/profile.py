@@ -14,3 +14,5 @@ class Profile(BaseModel):
 profiles = db.create(Profile, foreign_keys=[("user_id", "user", "id")], 
                      not_null=['user_id', 'name', 'title', 'bio', 'phone_no'], 
                      if_not_exists=True)
+
+profiles.create_index(["user_id"], unique=True, find_unique_name=True)
