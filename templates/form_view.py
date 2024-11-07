@@ -63,6 +63,8 @@ def template_form_view(table_name=None, mode='create', record_id=None):
     table = get_table_by_name(table_name)
     record = None
     if record_id:
+        # TODO: remove this.
+        get_one_2_many_values_by_id(table, res_id=record_id)
         record = table[record_id]
     if mode not in valid_modes:
         raise Exception(f"{mode} is not a valid mode. Valid modes are {valid_modes}")
