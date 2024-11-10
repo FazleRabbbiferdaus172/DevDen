@@ -32,7 +32,7 @@ def generate_header_nav():
     nav = Nav(
         A(Span('Home', cls='is-size-5 has-text-left'), cls="side-nav selected", hx_get=f'about/page/',
           hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml'),
-        Span(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav", hx_get=f'project/page/?idx={1}',
+        A(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav", hx_get=f'project/page/?idx={1}',
              hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml'),
         A(Span('How to reach me', cls='is-size-5 has-text-left'),  cls="side-nav", hx_get=f'contact/page/',
           hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml'),
@@ -42,8 +42,8 @@ def generate_header_nav():
 
 def generate_public_header():
     header = Header(
-        generate_header_subtitle(), 
         generate_header_title(), 
+        generate_header_subtitle(), 
         generate_header_nav(), 
         cls='block public-header public-section-left')
     return header
