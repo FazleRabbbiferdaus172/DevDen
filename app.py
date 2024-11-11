@@ -7,6 +7,9 @@ from models.profile import profiles
 from models.project import projects
 from models.work_experience import work_experiences
 from models.social_media_link import social_media_lniks
+from models.node import nodes
+from models.attribute import attributes
+from models.website import websites
 
 from utils.password_utils import *
 from utils.table_utils import *
