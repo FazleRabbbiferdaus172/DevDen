@@ -36,6 +36,7 @@ def form_fields(table, table_name=None, mode='create', record=None):
                     Label(col.name, cls='label is-capitalized'),
                     Div(
                         Select(
+                            Option(""),
                             *[Option(rec.name, value=rec.id) for rec in relational_recs],
                             required=required, id=col.name)
                         ,cls='select'),
