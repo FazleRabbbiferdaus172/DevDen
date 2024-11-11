@@ -1,5 +1,8 @@
-from fasthtml.components import *
+from collections import defaultdict
+
+from fasthtml import components as ftc
 from templates.infinite_scroll_view import generate_infnite_scroll_list_public
+from utils.table_utils import *
 
 def generate_about_section_public():
     return [Span("About Me -", cls='title is-capitalized is-5'),
@@ -40,13 +43,30 @@ def generate_header_nav():
     )
     return nav
 
-def generate_public_header():
+def generate_public_header(header_root_node, node_table, attribute_table):
+    get_element_from_node(header_root_node, node_table, attribute_table)
     header = Header(
         generate_header_title(), 
         generate_header_subtitle(), 
         generate_header_nav(), 
         cls='block public-header public-section-left')
     return header
+
+def get_element_from_node(node, node_table, attribute_table):
+    node = node.__dict__
+    node_queue = []
+    node_queue.append(node)
+    node_structure = defaultdict(list)
+    parent_node_elements = defaultdict(None)
+    while node_queue:
+        node_to_process = node_queue.pop(0)
+        child_nodes = list(node_table.rows_where(f'parent_node_id = {node_to_process["id"]}'))
+        for child_node in child_nodes:
+            node_structure[node_to_process['id']].append(child_node['id'])
+            node_queue.append(child_node)
+        if child_nodes:
+            parent_node_elements[node_to_process['id']] = node_to_process
+    print(node_structure)
 
 def generate_default_public_main_content():
     return generate_about_section_public()
@@ -81,7 +101,12 @@ def generate_public_footer():
     return footer
 
 def main_public_template(*args, **kwargs):
-    header = generate_public_header()
+    website = get_table_by_name('website')
+    record = website[1]
+    node = get_table_by_name('node')
+    attribute = get_table_by_name('attribute')
+    header = generate_public_header(node[record.header_node_root_id],
+                                    node, attribute_table=attribute)
     main = generate_public_main()
     footer = generate_public_footer()
     body = (Title("Ferdaus's Den"), Body(Div(header, main, cls="public"), footer)
