@@ -27,16 +27,18 @@ def form_fields(table, table_name=None, mode='create', record=None):
                     Label(col.name, cls='label is-capitalized'),
                     Div(
                         get_form_input(col=col, mode=mode, required=required, record=record),
-                        # Input(id=col.name, placeholder=col.name, required=required, type="text"),
                         cls='control'),
                     cls='field')
         else:
             relational_recs = form_related_fields_dict['foreign_keys_column_records_dict'][col.name]
+            initial_option = [Option("")]
+            if record:
+                initial_option = [Option(rec.name, value=record[col.name]) for rec in relational_recs if rec.id == record[col.name]]
             input = Div(
                     Label(col.name, cls='label is-capitalized'),
                     Div(
                         Select(
-                            Option(""),
+                            *initial_option,
                             *[Option(rec.name, value=rec.id) for rec in relational_recs],
                             required=required, id=col.name)
                         ,cls='select'),
