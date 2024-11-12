@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from fasthtml import components as ftc
+from fasthtml.components import *
 from templates.infinite_scroll_view import generate_infnite_scroll_list_public
 from utils.table_utils import *
 
@@ -44,29 +45,46 @@ def generate_header_nav():
     return nav
 
 def generate_public_header(header_root_node, node_table, attribute_table):
-    get_element_from_node(header_root_node, node_table, attribute_table)
-    header = Header(
-        generate_header_title(), 
-        generate_header_subtitle(), 
-        generate_header_nav(), 
-        cls='block public-header public-section-left')
+    header = get_element_from_root(header_root_node, node_table, attribute_table)
+    # header = Header(
+    #     generate_header_title(), 
+    #     generate_header_subtitle(), 
+    #     generate_header_nav(), 
+    #     cls='block public-header public-section-left')
     return header
 
-def get_element_from_node(node, node_table, attribute_table):
-    node = node.__dict__
-    node_queue = []
-    node_queue.append(node)
-    node_structure = defaultdict(list)
-    parent_node_elements = defaultdict(None)
-    while node_queue:
-        node_to_process = node_queue.pop(0)
-        child_nodes = list(node_table.rows_where(f'parent_node_id = {node_to_process["id"]}'))
-        for child_node in child_nodes:
-            node_structure[node_to_process['id']].append(child_node['id'])
-            node_queue.append(child_node)
-        if child_nodes:
-            parent_node_elements[node_to_process['id']] = node_to_process
-    print(node_structure)
+def get_element_from_root(node, node_table, attribute_table):
+    element = get_element_from_node_dfs(node.__dict__, node_table, attribute_table)
+    return element
+
+def get_element_from_node_dfs(node, node_table, attrubute_table):
+    attribute_record = attrubute_table(f"node_id = {node['id']}")
+    if attribute_record:
+        attribute_record = attribute_record[0].__dict__
+    child_nodes = list(node_table.rows_where(f'parent_node_id = {node["id"]}'))
+    if not child_nodes:
+        element = node['tag']
+        if hasattr(ftc, node['tag']):
+            if node['type'] == 'record':
+                query_string = f"id = {node['db_table_row']}"
+                content_table_row = get_table_by_name(node['db_table_name'])(query_string)[0].__dict__
+                content = content_table_row[node['db_table_column']]
+            elif node['type'] == 'static':
+                content = node['content']
+            else:
+                content = 'N/A'
+            if attribute_record:
+                element = getattr(ftc, node['tag'])(content, **{'cls':attribute_record['attr_vals']})
+            else:
+                element = getattr(ftc, node['tag'])(content, **{'cls':attribute_record['attr_vals']})
+        return element
+    child_args = []
+    for child_node in child_nodes:
+        child_arg = get_element_from_node_dfs(child_node, node_table, attrubute_table)
+        child_args.append(child_arg)
+    if hasattr(ftc, node['tag'].capitalize()):
+        element = getattr(ftc, node['tag'])(*child_args ,node['content'], **{'cls':attribute_record['attr_vals']})
+    return element
 
 def generate_default_public_main_content():
     return generate_about_section_public()
