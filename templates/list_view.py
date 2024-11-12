@@ -7,10 +7,10 @@ def list_view_cell(column_name, cell_value, list_related_table_dict):
     else:
         if cell_value:
             try:
-                relational_column_cell_value = list_related_table_dict[column_name](str(cell_value))[0].name
+                relational_column_cell_value = list_related_table_dict[column_name](f'id = {cell_value}')[0].name
             except Exception as e:
                 print(e)
-                relational_column_cell_value = list_related_table_dict[column_name](str(cell_value))[0].id
+                relational_column_cell_value = list_related_table_dict[column_name](f'id = {cell_value}')[0].id
         else:
             relational_column_cell_value = ""
         return Td(relational_column_cell_value, cls="has-text-centered")
