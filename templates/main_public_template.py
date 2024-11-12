@@ -57,33 +57,74 @@ def get_element_from_root(node, node_table, attribute_table):
     element = get_element_from_node_dfs(node.__dict__, node_table, attribute_table)
     return element
 
-def get_element_from_node_dfs(node, node_table, attrubute_table):
+def get_attribute(node, attrubute_table):
     attribute_record = attrubute_table(f"node_id = {node['id']}")
     if attribute_record:
         attribute_record = attribute_record[0].__dict__
+    return attribute_record
+
+def get_tag(node):
+    if hasattr(ftc, node['tag'].capitalize()):
+        return getattr(ftc, node['tag'])
+    else:
+        raise Exception("Tag not found!!!!!!!!")
+
+def generate_record_element(node, attribute, tag, child_args):
+    query_string = f"id = {node['db_table_row']}"
+    content_table_row = get_table_by_name(node['db_table_name'])(query_string)[0].__dict__
+    content = [content_table_row[node['db_table_column']]] + child_args
+    return tag(*content, **{'cls':attribute['attr_vals']})
+
+def generate_staic_element(node, attribute, tag, child_args):
+    content = [node['content']] + child_args
+    return tag(*content, **{'cls':attribute['attr_vals']})
+
+def generate_link_element(node, attribute, tag, child_args):
+    content = []
+    if node['content']:
+        content.append(node['content'])
+    content += child_args
+    link = node['link_path']
+    return tag(*content, hx_get=f'{link}', hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml', **{'cls':attribute['attr_vals']})
+
+def generate_element_by_type(node, attribute, tag, child_args=[]):
+    if node['type'] == 'record':
+        return generate_record_element(node, attribute, tag, child_args)
+    elif node['type'] == 'static':
+        return generate_staic_element(node, attribute, tag, child_args)
+    elif node['type'] == 'link':
+        return generate_link_element(node, attribute, tag, child_args)
+    else:
+        return generate_staic_element(node, attribute, tag, child_args)
+
+def generate_leaf_element(node, attribute, tag):
+    element = generate_element_by_type(node, attribute, tag)
+    return element
+
+def generate_parent_element(node, child_args, attribute, tag):
+    return generate_element_by_type(node, attribute, tag, child_args)
+
+def generate_node_element(node,  attribute, is_leaf=True, child_args=[]):
+    tag = get_tag(node=node)
+    element = tag()
+    if not is_leaf:
+        element = generate_parent_element(node=node, child_args=child_args, attribute=attribute, tag=tag)
+    else:
+        element = generate_leaf_element(node=node, attribute=attribute, tag=tag)
+    return element
+
+def get_element_from_node_dfs(node, node_table, attrubute_table):
+    attribute_record = get_attribute(node, attrubute_table)
+
     child_nodes = list(node_table.rows_where(f'parent_node_id = {node["id"]}'))
     if not child_nodes:
-        element = node['tag']
-        if hasattr(ftc, node['tag']):
-            if node['type'] == 'record':
-                query_string = f"id = {node['db_table_row']}"
-                content_table_row = get_table_by_name(node['db_table_name'])(query_string)[0].__dict__
-                content = content_table_row[node['db_table_column']]
-            elif node['type'] == 'static':
-                content = node['content']
-            else:
-                content = 'N/A'
-            if attribute_record:
-                element = getattr(ftc, node['tag'])(content, **{'cls':attribute_record['attr_vals']})
-            else:
-                element = getattr(ftc, node['tag'])(content, **{'cls':attribute_record['attr_vals']})
+        element = generate_node_element(node=node, attribute=attribute_record)
         return element
     child_args = []
     for child_node in child_nodes:
         child_arg = get_element_from_node_dfs(child_node, node_table, attrubute_table)
         child_args.append(child_arg)
-    if hasattr(ftc, node['tag'].capitalize()):
-        element = getattr(ftc, node['tag'])(*child_args ,node['content'], **{'cls':attribute_record['attr_vals']})
+    element = generate_node_element(node=node, attribute=attribute_record, is_leaf=False, child_args=child_args)
     return element
 
 def generate_default_public_main_content():
