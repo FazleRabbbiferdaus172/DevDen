@@ -161,9 +161,8 @@ def generate_public_footer_content():
     )
     return icon_list
 
-def generate_public_footer():
-    footer_content = generate_public_footer_content()
-    footer = Footer(footer_content, cls="public-footer")
+def generate_public_footer(header_root_node, node_table, attribute_table):
+    footer = get_element_from_root(header_root_node, node_table, attribute_table)
     return footer
 
 def main_public_template(*args, **kwargs):
@@ -174,7 +173,8 @@ def main_public_template(*args, **kwargs):
     header = generate_public_header(node[record.header_node_root_id],
                                     node, attribute_table=attribute)
     main = generate_public_main()
-    footer = generate_public_footer()
+    footer = generate_public_footer(node[record.footer_node_root_id],
+                                    node, attribute_table=attribute)
     body = (Title("Ferdaus's Den"), Body(Div(header, main, cls="public"), footer)
             )
     return body

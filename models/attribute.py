@@ -1,6 +1,7 @@
 from .base_model import BaseModel
 from .db import db
 
+# Todo make attributes take dynamic records too
 class Attribute(BaseModel):
     id:int
     name:str
