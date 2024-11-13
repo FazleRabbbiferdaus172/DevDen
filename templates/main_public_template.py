@@ -86,12 +86,13 @@ def generate_staic_element(node, attribute, tag, child_args):
     return tag(*content, **attribute)
 
 def generate_link_element(node, attribute, tag, child_args):
+    # TODO: REMOVE this, no need of this as links href or htmx things could be handled by attribute
     content = []
     if node['content']:
         content.append(node['content'])
     content += child_args
     link = node['link_path']
-    return tag(*content, hx_get=f'{link}', hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml', **attribute)
+    return tag(*content, **attribute)
 
 def generate_element_by_type(node, attribute, tag, child_args=[]):
     if node['type'] == 'record':
