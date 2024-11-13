@@ -58,10 +58,16 @@ def get_element_from_root(node, node_table, attribute_table):
     return element
 
 def get_attribute(node, attrubute_table):
-    attribute_record = attrubute_table(f"node_id = {node['id']}")
-    if attribute_record:
-        attribute_record = attribute_record[0].__dict__
-    return attribute_record
+    attribute_records_dict = {}
+    attribute_records = attrubute_table(f"node_id = {node['id']}")
+    if attribute_records:
+        for record in attribute_records:
+            # record = record.__dict__
+            if record.attr_type not in attribute_records_dict:
+                attribute_records_dict[record.attr_type] = record.attr_vals
+            else:
+                attribute_records_dict[record.attr_type] +=  " " + record.attr_vals
+    return attribute_records_dict
 
 def get_tag(node):
     if hasattr(ftc, node['tag'].capitalize()):
@@ -73,11 +79,11 @@ def generate_record_element(node, attribute, tag, child_args):
     query_string = f"id = {node['db_table_row']}"
     content_table_row = get_table_by_name(node['db_table_name'])(query_string)[0].__dict__
     content = [content_table_row[node['db_table_column']]] + child_args
-    return tag(*content, **{'cls':attribute['attr_vals']})
+    return tag(*content, **attribute)
 
 def generate_staic_element(node, attribute, tag, child_args):
     content = [node['content']] + child_args
-    return tag(*content, **{'cls':attribute['attr_vals']})
+    return tag(*content, **attribute)
 
 def generate_link_element(node, attribute, tag, child_args):
     content = []
@@ -85,7 +91,7 @@ def generate_link_element(node, attribute, tag, child_args):
         content.append(node['content'])
     content += child_args
     link = node['link_path']
-    return tag(*content, hx_get=f'{link}', hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml', **{'cls':attribute['attr_vals']})
+    return tag(*content, hx_get=f'{link}', hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml', **attribute)
 
 def generate_element_by_type(node, attribute, tag, child_args=[]):
     if node['type'] == 'record':
