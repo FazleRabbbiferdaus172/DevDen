@@ -54,7 +54,7 @@ media/
 # Flask
 instance/
 *.pid
-
+data/
 # Static files
 staticfiles/
 static/

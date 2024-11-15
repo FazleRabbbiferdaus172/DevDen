@@ -17,17 +17,11 @@ def Home(auth,session):
         ))
 
 @public_routes(path='/page/{page_name}/', methods=['get'])
-def page():
-
-@public_routes(path='/project/page/', methods=['get'])
-def project(idx:int|None = 0):
-    return generate_project_public('project', idx)
-
-@public_routes(path='/about/page/', methods=['get'])
-def about(idx:int|None = 0):
-    return generate_about_section_public()
-
-@public_routes(path='/contact/page/', methods=['get'])
-def contact(idx:int|None = 0):
-    return generate_how_to_reach_public()
+def page(page_name: str, fragment_num:int|None = 0):
+    if page_name == 'project':
+        return generate_project_public('project', fragment_num)
+    elif page_name == 'about':
+        return generate_about_section_public()
+    elif page_name == 'contact':
+        return generate_how_to_reach_public()
 

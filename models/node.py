@@ -4,7 +4,7 @@ from .db import db
 possible_types = ['static', 'link', 'node', 'dynamic']
 
 # TODO: add another field priority/sequence that will determine which record renders first?
-
+# TODO: Remove the link_path field?
 class Node(BaseModel):
     id:int
     name:str
