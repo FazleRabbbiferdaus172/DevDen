@@ -149,17 +149,17 @@ def generate_public_main():
     )
     return main
 
-def generate_public_footer_content():
-    icon_list = Div(
-        A(I(cls="fab fa-github fa-2x block link"), cls="link",
-          href="https://github.com/FazleRabbbiferdaus172"),
-        A(I(cls="fab fa-linkedin-in fa-2x block link"),  cls="link",
-          href="https://www.linkedin.com/in/fazle-rabbi-ferdaus-113255185/"),
-        A(I(cls="fab fa-facebook fa-2x block link"), cls="link",
-          href="https://www.facebook.com/FazleRabbiFerdaus/"),
-        cls="public-links"
-    )
-    return icon_list
+# def generate_public_footer_content():
+#     icon_list = Div(
+#         A(I(cls="fab fa-github fa-2x block link"), cls="link",
+#           href="https://github.com/FazleRabbbiferdaus172"),
+#         A(I(cls="fab fa-linkedin-in fa-2x block link"),  cls="link",
+#           href="https://www.linkedin.com/in/fazle-rabbi-ferdaus-113255185/"),
+#         A(I(cls="fab fa-facebook fa-2x block link"), cls="link",
+#           href="https://www.facebook.com/FazleRabbiFerdaus/"),
+#         cls="public-links"
+#     )
+#     return icon_list
 
 def generate_public_footer(header_root_node, node_table, attribute_table):
     footer = get_element_from_root(header_root_node, node_table, attribute_table)
