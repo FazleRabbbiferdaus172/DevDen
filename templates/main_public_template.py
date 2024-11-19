@@ -24,33 +24,8 @@ def generate_how_to_reach_public():
                  Span(" -"), cls='custom-block has-text-weight-semibold'),
             Span(Span("House#34, Road#7, Block#E, Mirpur-12, Dhaka, Bangladesh "), Span(I(cls="fas fa-map-pin")), Span(" -"), cls='custom-block has-text-weight-semibold')]
 
-def generate_header_title():
-    title = H1('Fazle Rabbi Ferdaus', cls='title is-1')     
-    return title
-
-def generate_header_subtitle():
-    subtitle = H2('Software Enginner', cls='subtitle is-4')
-    return subtitle
-
-def generate_header_nav():
-    nav = Nav(
-        A(Span('Home', cls='is-size-5 has-text-left'), cls="side-nav selected", hx_get=f'about/page/',
-          hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml'),
-        A(Span('Projects', cls='is-size-5 has-text-left'), cls="side-nav", hx_get=f'project/page/?idx={1}',
-             hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml'),
-        A(Span('How to reach me', cls='is-size-5 has-text-left'),  cls="side-nav", hx_get=f'contact/page/',
-          hx_trigger='click', hx_target='#main-content-right', hx_swap='innerHtml'),
-        cls="block pt-5 pl-5 public-nav",
-    )
-    return nav
-
 def generate_public_header(header_root_node, node_table, attribute_table):
     header = get_element_from_root(header_root_node, node_table, attribute_table)
-    # header = Header(
-    #     generate_header_title(), 
-    #     generate_header_subtitle(), 
-    #     generate_header_nav(), 
-    #     cls='block public-header public-section-left')
     return header
 
 def get_element_from_root(node, node_table, attribute_table):
@@ -148,18 +123,6 @@ def generate_public_main():
             cls='block content is-normal is-pullued-bottom-right public-section-right')
     )
     return main
-
-# def generate_public_footer_content():
-#     icon_list = Div(
-#         A(I(cls="fab fa-github fa-2x block link"), cls="link",
-#           href="https://github.com/FazleRabbbiferdaus172"),
-#         A(I(cls="fab fa-linkedin-in fa-2x block link"),  cls="link",
-#           href="https://www.linkedin.com/in/fazle-rabbi-ferdaus-113255185/"),
-#         A(I(cls="fab fa-facebook fa-2x block link"), cls="link",
-#           href="https://www.facebook.com/FazleRabbiFerdaus/"),
-#         cls="public-links"
-#     )
-#     return icon_list
 
 def generate_public_footer(header_root_node, node_table, attribute_table):
     footer = get_element_from_root(header_root_node, node_table, attribute_table)
