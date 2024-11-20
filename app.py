@@ -9,6 +9,7 @@ from models.work_experience import work_experiences
 from models.social_media_link import social_media_links
 from models.node import nodes
 from models.attribute import attributes
+from models.website_page import website_pages
 from models.website import websites
 
 from utils.password_utils import *

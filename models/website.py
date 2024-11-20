@@ -11,12 +11,14 @@ class Website(BaseModel):
     header_node_root_id:int
     main_node_root_id:int
     footer_node_root_id:int
+    page_id:int
 
 websites = db.create(Website, foreign_keys=[
                     ("header_node_root_id", "node", "id"),
                     ("main_node_root_id", "node", "id"),
                     ("footer_node_root_id", "node", "id"),
-                    ("user_id", "user", "id")
+                    ("user_id", "user", "id"),
+                    ("page_id", "website_page", "id")
                     ], 
                      not_null=['user_id'], 
                      if_not_exists=True)
