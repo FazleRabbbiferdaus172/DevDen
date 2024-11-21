@@ -128,6 +128,9 @@ def generate_public_footer(header_root_node, node_table, attribute_table):
     footer = get_element_from_root(header_root_node, node_table, attribute_table)
     return footer
 
+def generate_page_from_node():
+    pass
+
 def main_public_template(*args, **kwargs):
     website = get_table_by_name('website')
     record = website[1]
