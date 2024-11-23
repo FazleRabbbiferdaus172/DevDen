@@ -128,8 +128,16 @@ def generate_public_footer(header_root_node, node_table, attribute_table):
     footer = get_element_from_root(header_root_node, node_table, attribute_table)
     return footer
 
-def generate_page_from_node():
-    pass
+def generate_page(page_name, **kwargs):
+    website_page = get_table_by_name('website_page')
+    page = website_page[1]
+    node = get_table_by_name('node')
+    attribute = get_table_by_name('attribute')
+    if page.type == 'static':
+        return get_element_from_root(node[page.node_id], node, attribute)
+    else:
+        fragment_num = kwargs.get('fragment_num', 0)
+        return generate_infnite_scroll_list_public(page.db_table_name, fragment_num)
 
 def main_public_template(*args, **kwargs):
     website = get_table_by_name('website')

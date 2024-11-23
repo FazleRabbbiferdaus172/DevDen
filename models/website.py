@@ -21,4 +21,4 @@ websites = db.create(Website, foreign_keys=[
                     ("page_id", "website_page", "id")
                     ], 
                      not_null=['user_id'], 
-                     if_not_exists=True)
+                     if_not_exists=True, transform=True)
