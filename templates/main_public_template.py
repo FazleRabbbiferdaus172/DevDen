@@ -144,11 +144,15 @@ def main_public_template(*args, **kwargs):
     record = website[1]
     node = get_table_by_name('node')
     attribute = get_table_by_name('attribute')
-    header = generate_public_header(node[record.header_node_root_id],
-                                    node, attribute_table=attribute)
+    header = Div('header')
+    footer = Div('footer')
+    if record.header_node_root_id:
+        header = generate_public_header(node[record.header_node_root_id],
+                                        node, attribute_table=attribute)
     main = generate_public_main()
-    footer = generate_public_footer(node[record.footer_node_root_id],
-                                    node, attribute_table=attribute)
+    if record.footer_node_root_id:
+        footer = generate_public_footer(node[record.footer_node_root_id],
+                                        node, attribute_table=attribute)
     body = (Title("Ferdaus's Den"), Body(Div(header, main, cls="public"), footer)
             )
     return body
