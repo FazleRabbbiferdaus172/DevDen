@@ -1,5 +1,7 @@
 from fasthtml.components import *
 
+# TODO: NAV css needs to be considered as if the browser is reduced then the nav bar eat up some page and does not push down the main div.
+
 def main_template(*args, **kwargs):
     nav = Nav(
         Div(Span(kwargs.get('page_title', 'Den'), cls='is-size-3 has-text-centered has-text-justified is-uppercase'), cls="navbar-brand px-2"),

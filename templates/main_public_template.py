@@ -130,6 +130,7 @@ def generate_public_footer(header_root_node, node_table, attribute_table):
 
 def generate_page(page_name, **kwargs):
     website_page = get_table_by_name('website_page')
+    # TODO: need to fix this page logic if no page found return not found. 
     page = website_page[1]
     node = get_table_by_name('node')
     attribute = get_table_by_name('attribute')
