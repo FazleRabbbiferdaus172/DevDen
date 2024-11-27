@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from sqlite_minutils.db import NotFoundError
 from fasthtml import components as ftc
 from fasthtml.components import *
 from templates.infinite_scroll_view import generate_infnite_scroll_list_public
@@ -129,16 +130,22 @@ def generate_public_footer(header_root_node, node_table, attribute_table):
     return footer
 
 def generate_page(page_name, **kwargs):
-    website_page = get_table_by_name('website_page')
-    # TODO: need to fix this page logic if no page found return not found. 
-    page = website_page[1]
-    node = get_table_by_name('node')
-    attribute = get_table_by_name('attribute')
-    if page.type == 'static':
-        return get_element_from_root(node[page.node_id], node, attribute)
-    else:
-        fragment_num = kwargs.get('fragment_num', 0)
-        return generate_infnite_scroll_list_public(page.db_table_name, fragment_num)
+    try:
+        website_page = get_table_by_name('website_page')
+        # TODO: need to fix this page logic if no page found return not found.
+        page_gen = website_page.ids_and_rows_where(f"page_link like 'page/{page_name}%'")
+        page_item = next(page_gen, None)
+        if not page_item: raise NotFoundError
+        page_id, page = page_item
+        node = get_table_by_name('node')
+        attribute = get_table_by_name('attribute')
+        if page['type'] == 'static':
+            return get_element_from_root(node[page.node_id], node, attribute)
+        else:
+            fragment_num = kwargs.get('fragment_num', 0)
+            return generate_infnite_scroll_list_public(page['db_table_name'], fragment_num)
+    except Exception as e:
+        return (Title('Opppsss!'), Div('Page not found.'))
 
 def main_public_template(*args, **kwargs):
     website = get_table_by_name('website')
