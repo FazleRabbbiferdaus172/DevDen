@@ -13,5 +13,4 @@ class WebsitePage(BaseModel):
 
 website_pages = db.create(WebsitePage, foreign_keys=[
                     ("node_id", "node", "id"),
-                    ],
-                     if_not_exists=True, transform=True)
+                    ])
