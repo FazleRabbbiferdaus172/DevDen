@@ -18,9 +18,10 @@ def Home(auth,session):
 
 @public_routes(path='/page/{page_name}/', methods=['get'])
 def page(page_name: str, fragment_num:int|None = 0):
-    if page_name == 'project':
-        return generate_page(page_name, fragment_num=fragment_num)
-    elif page_name == 'about':
-        return generate_about_section_public()
-    elif page_name == 'contact':
-        return generate_how_to_reach_public()
+    return generate_page(page_name, fragment_num=fragment_num)
+    # if page_name == 'project':
+    #     return generate_page(page_name, fragment_num=fragment_num)
+    # elif page_name == 'about':
+    #     return generate_about_section_public()
+    # elif page_name == 'contact':
+    #     return generate_how_to_reach_public()
