@@ -140,7 +140,7 @@ def generate_page(page_name, **kwargs):
         node = get_table_by_name('node')
         attribute = get_table_by_name('attribute')
         if page['type'] == 'static':
-            return get_element_from_root(node[page.node_id], node, attribute)
+            return get_element_from_root(node[page['node_id']], node, attribute)
         else:
             fragment_num = kwargs.get('fragment_num', 0)
             return generate_infnite_scroll_list_public(page['db_table_name'], fragment_num)
