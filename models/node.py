@@ -17,7 +17,6 @@ class Node(BaseModel):
     db_table_row:str
     parent_node_id:int
 
-
 nodes = db.create(Node, foreign_keys=[("parent_node_id", "node", "id")], 
                      not_null=['type'], 
                      if_not_exists=True)
