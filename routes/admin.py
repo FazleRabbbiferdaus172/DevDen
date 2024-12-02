@@ -7,9 +7,15 @@ from templates.main_admin_template import main_template
 from templates.grid_view import generate_tables_view_grid
 from templates.list_view import template_list_view
 from templates.form_view import template_form_view
+from templates.website_builder_view import website_builder_view
 from utils.redirect_uits import RedirectResponse
 
 admin_routes = APIRouter()
+
+@admin_routes(path="/admin/build/website", methods=['get'])
+def admin_build_website(auth):
+    website_builder = website_builder_view()
+    return main_template(website_builder)
 
 # @app.get("/admin")
 @admin_routes(path="/admin", methods=['get'])
