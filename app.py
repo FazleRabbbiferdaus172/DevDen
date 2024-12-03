@@ -34,7 +34,7 @@ logger = logging.basicConfig(level=logging.DEBUG, format="{asctime}:{levelname} 
 
 css = Style(':root {--pico-font-size:90%,--pico-font-family: Pacifico, cursive;}')
 hdrs=(
-    Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
+    # Link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css', type='text/css'),
     Link(rel='stylesheet', href='./scripts/css/script.css', type='text/css'),
     Script(src='./scripts/js/main.js', defer=True),
     Script(src="https://kit.fontawesome.com/7dfe397011.js", crossorigin="anonymous")

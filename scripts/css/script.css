@@ -1,7 +1,8 @@
-*,*::after, *::before {
+/* *,*::after, *::before {
     margin: 0px;
     padding: 0;
     box-sizing: inherit;
+    height: 100%;
 }
 
 :root {
@@ -16,11 +17,13 @@
 
 html {
     overflow: unset;
+    height: 100% !important;
 }
 
 body {
     box-sizing: border-box;
     padding:var(--base-public-padding);
+    height: 100% !important;
 }
 
 .public {
@@ -37,7 +40,7 @@ body {
 }
 
 .public-header{
-    /* width: fit-content; */
+
 
 }
 
@@ -49,7 +52,6 @@ body {
 
 .public-nav {
     position: relative;
-    /* z-index: 100; */
 }
 
 .side-nav {
@@ -76,8 +78,6 @@ body {
 }
 
 .is-pullued-bottom-right {
-    /* max-width: calc(100vw - 6.5rem); 
-    min-width: calc(70vw); */
     position: absolute;
     right: var(--base-public-padding);
     bottom: var(--base-public-padding);
@@ -243,4 +243,26 @@ body {
     .public-nav {
         z-index: 100;
     }
- }
+ } */
+
+
+ /* html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.container {
+    height: 100%;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+} */
+
+*,
+*::after,
+*::before {
+    background-color: red;
+}

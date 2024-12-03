@@ -15,7 +15,7 @@ admin_routes = APIRouter()
 @admin_routes(path="/admin/build/website", methods=['get'])
 def admin_build_website(auth):
     website_builder = website_builder_view()
-    return main_template(website_builder)
+    return website_builder
 
 # @app.get("/admin")
 @admin_routes(path="/admin", methods=['get'])
@@ -33,6 +33,10 @@ def table_list_views(table_name: str):
         list_view = template_list_view(table=table, table_name=table_name)
         return main_template(list_view)
     except NotFoundError:
+        return main_template((
+            H1("No Data")
+        ))
+    except:
         return main_template((
             H1("No Data")
         ))

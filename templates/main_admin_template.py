@@ -33,4 +33,5 @@ def main_template(*args, **kwargs):
     web_client = (Title("Den"), 
                     body
                   )
-    return web_client
+    return Main(args, cls='container')
+    # return Div("hi")

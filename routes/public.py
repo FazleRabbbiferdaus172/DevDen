@@ -15,6 +15,24 @@ def Home(auth,session):
         return main_public_template((
             H1("No Data")
         ))
+    
+@public_routes(path='/home/no', methods=['get'])
+def Home(auth,session):
+    try:
+        return main_public_template()
+    except NotFoundError:
+        return main_public_template((
+            H1("No Data")
+        ))
+    
+@public_routes(path='/home', methods=['get'])
+def Home(auth,session):
+    try:
+        return main_public_template()
+    except NotFoundError:
+        return main_public_template((
+            H1("No Data")
+        ))
 
 @public_routes(path='/page/{page_name}/', methods=['get'])
 def page(page_name: str, fragment_num:int|None = 0):
