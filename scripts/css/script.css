@@ -36,6 +36,15 @@ body {
     padding:var(--base-public-padding);
 }
 
+.title {
+    height: auto;
+}
+
+.subtitle {
+    height: auto;
+}
+
+
 .public {
     width: var(--base-public-width); 
     height: var(--base-public-height);
@@ -72,6 +81,7 @@ body {
 
 .custom-block {
     display: block;
+    height: auto;
 }
 
 .side-nav:hover {
@@ -112,6 +122,10 @@ body {
       rgb(179, 179, 179),
       rgba(0, 0, 0, 0)
     ) 1 100%;
+}
+
+#main-content-right {
+    height: auto;
 }
 
 *::-webkit-scrollbar-track
