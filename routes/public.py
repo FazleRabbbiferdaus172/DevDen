@@ -25,3 +25,8 @@ def page(page_name: str, fragment_num:int|None = 0):
     #     return generate_about_section_public()
     # elif page_name == 'contact':
     #     return generate_how_to_reach_public()
+
+
+@public_routes(path='/grid/blocks', methods=['get'])
+def grid_blocks():
+    return "ok"
