@@ -1,4 +1,4 @@
-from fasthtml.core import APIRouter
+from fasthtml.core import APIRouter, HttpHeader
 from fasthtml.common import NotFoundError
 from fasthtml.components import *
 
@@ -28,5 +28,6 @@ def page(page_name: str, fragment_num:int|None = 0):
 
 
 @public_routes(path='/grid/blocks', methods=['get'])
-def grid_blocks():
-    return "ok"
+def grid_blocks(req):
+    x_localstorage_data = req.headers["x_localstorage_data"]
+    return x_localstorage_data
