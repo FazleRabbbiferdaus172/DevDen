@@ -1,5 +1,8 @@
 from fasthtml.components import *
 
+
+tools_list = []
+
 def tool_bar_section():
     div_list = [Div(f"{i}", cls='cell has-background-light tool-bar-item',  id=f'tool-bar-{i}',style="height: 100%;") for i in range(12)]
     grid_div = Div(*div_list, cls='grid', style="height: 60%;")

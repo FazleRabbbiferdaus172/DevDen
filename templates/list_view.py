@@ -3,7 +3,7 @@ from utils.table_utils import get_foreign_keys_table
 
 def list_view_cell(column_name, cell_value, list_related_table_dict):
     if column_name not in list_related_table_dict.keys():
-        return Td(cell_value, cls="has-text-centered")
+        return Td(cell_value, cls="has-text-centered auto-height")
     else:
         if cell_value:
             try:
@@ -13,12 +13,12 @@ def list_view_cell(column_name, cell_value, list_related_table_dict):
                 relational_column_cell_value = list_related_table_dict[column_name](f'id = {cell_value}')[0].id
         else:
             relational_column_cell_value = ""
-        return Td(relational_column_cell_value, cls="has-text-centered")
+        return Td(relational_column_cell_value, cls="has-text-centered auto-height")
 
 def list_view_row(record, list_related_table_dict):
     return Tr(
             *[list_view_cell(column_name, cell_value, list_related_table_dict) for column_name, cell_value in record.__dict__.items()], 
-            Td(A("Edit", href=f"/admin/{record.table_name}/{record.id}"))
+            Td(A("Edit", href=f"/admin/{record.table_name}/{record.id}")), cls="auto-height"
         )
 
 def list_view_rows(table, list_related_table_dict):
@@ -27,18 +27,19 @@ def list_view_rows(table, list_related_table_dict):
 
 def template_list_view(table, table_name=None, row_clickable=True):
     thead = Thead(Tr(
-            *[Th(i.name, cls="has-text-centered is-capitalized") for i in table.columns],
-            Th(" ", cls="has-text-centered is-capitalized")
-        ))
+            *[Th(i.name, cls="has-text-centered is-capitalized auto-height") for i in table.columns],
+            Th(" ", cls="has-text-centered is-capitalized auto-height"), cls="auto-height"
+        ), cls="auto-height")
     list_related_table_dict = get_foreign_keys_table(table)
     table_rows = list_view_rows(table, list_related_table_dict)
     tbody = Tbody(*table_rows, 
                   Tr(
                       Td(
-                          A('Add New', href=f"/admin/{table_name}/new",cls="has-text-centered"),
+                          A('Add New', href=f"/admin/{table_name}/new",cls="has-text-centered auto-height"),
                           colspan=len(table.columns)
-                          )
-                      )
+                          ), cls="auto-height"
+                      ),
+                      cls="auto-height"
                   )
     tfooter = Tfoot()
-    return Div(Table(thead, tbody, tfooter, cls="table is-striped is-hoverable table is-fullwidth"), cls='table-container')
+    return Div(Table(thead, tbody, tfooter, cls="table is-striped is-hoverable table is-fullwidth"), cls='table-container table-container-scrollable')

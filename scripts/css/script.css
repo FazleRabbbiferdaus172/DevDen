@@ -185,6 +185,14 @@ body {
     color: none;
 }
 
+.table-container-scrollable {
+    overflow: scroll;
+}
+
+.auto-height {
+    height: auto !important;
+}
+
 @media all and (min-width: 1024px) and (max-width: 1280px) {
     :root {
         --base-public-padding-half: 1.5rem;
